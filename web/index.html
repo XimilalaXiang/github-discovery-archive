@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#08090a" />
+  <title>GitHub 每日发现档案 · Discovery Archive</title>
+  <meta name="description" content="每日 GitHub 推荐项目的时间线档案：可搜索、可筛选、可统计。" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0e10'/%3E%3Cpath d='M30 66V34l20 16 20-16v32' stroke='%237c8aff' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 100 100" width="22" height="22"><rect width="100" height="100" rx="22" fill="none"/><path d="M30 68V32l20 17 20-17v36" stroke="currentColor" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="brand-text">
+          <h1>GitHub 每日发现档案</h1>
+          <p class="brand-sub">Daily Discovery Archive · <span data-stat="range">…</span></p>
+        </div>
+      </div>
+      <nav class="header-actions" aria-label="站点操作">
+        <a class="ghost-link" href="https://github.com/XimilalaXiang/github-discovery-archive" target="_blank" rel="noopener noreferrer">源码 ↗</a>
+      </nav>
+    </div>
+
+    <div class="toolbar" role="search">
+      <div class="search-field">
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="search" type="search" autocomplete="off" spellcheck="false"
+               placeholder="搜索项目、描述、标签…  （按 / 聚焦）" aria-label="搜索项目" />
+        <button id="search-clear" class="icon-btn" type="button" hidden aria-label="清除搜索">×</button>
+      </div>
+
+      <div class="view-switch" role="tablist" aria-label="视图切换">
+        <button class="view-btn is-active" data-view="timeline" role="tab" aria-selected="true">时间线</button>
+        <button class="view-btn" data-view="gallery" role="tab" aria-selected="false">画廊</button>
+        <button class="view-btn" data-view="stats" role="tab" aria-selected="false">统计</button>
+      </div>
+
+      <div class="sort-field">
+        <label for="sort" class="sr-only">排序方式</label>
+        <select id="sort" aria-label="排序方式">
+          <option value="date-desc">最近推荐优先</option>
+          <option value="stars-desc">星标最多优先</option>
+          <option value="name-asc">名称 A → Z</option>
+          <option value="recent-desc">最近推送优先</option>
+          <option value="recs-desc">推荐次数最多</option>
+        </select>
+      </div>
+
+      <button id="filters-toggle" class="icon-text-btn" type="button" aria-expanded="false" aria-controls="filters">
+        <span aria-hidden="true">⚙</span> 筛选 <span id="filter-count" class="badge" hidden>0</span>
+      </button>
+    </div>
+
+    <div id="active-filters" class="active-filters" hidden></div>
+  </header>
+
+  <div class="layout">
+    <aside id="filters" class="filters" aria-label="筛选器" hidden>
+      <div class="filters-head">
+        <h2>筛选</h2>
+        <button id="filters-reset" class="link-btn" type="button">重置全部</button>
+      </div>
+      <div class="filter-block">
+        <h3>标签 <span class="muted" data-count-for="tags"></span></h3>
+        <div id="tag-filters" class="chip-group" role="group" aria-label="按标签筛选"></div>
+      </div>
+      <div class="filter-block">
+        <h3>语言 <span class="muted" data-count-for="languages"></span></h3>
+        <div id="lang-filters" class="chip-group" role="group" aria-label="按语言筛选"></div>
+      </div>
+      <div class="filter-block">
+        <h3>推荐状态</h3>
+        <div id="status-filters" class="chip-group" role="group" aria-label="按推荐状态筛选">
+          <button class="chip" data-status="multi" type="button">多次推荐</button>
+          <button class="chip" data-status="archived" type="button">已归档</button>
+        </div>
+      </div>
+    </aside>
+
+    <main id="main" class="content" tabindex="-1">
+      <div id="status-region" class="status-region" role="status" aria-live="polite"></div>
+
+      <section id="view-timeline" class="view" aria-labelledby="view-timeline-h">
+        <div id="timeline-root"></div>
+      </section>
+
+      <section id="view-gallery" class="view" hidden aria-labelledby="view-gallery-h">
+        <div id="gallery-root" class="gallery"></div>
+      </section>
+
+      <section id="view-stats" class="view" hidden aria-labelledby="view-stats-h">
+        <div id="stats-root"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>数据源：每日推荐档案 · 基于 GitHub API 元数据</span>
+      <span class="dot-sep">·</span>
+      <span>生成于 <span data-stat="generated">…</span></span>
+      <span class="dot-sep">·</span>
+      <span><span data-stat="unique">0</span> 个去重项目 / <span data-stat="records">0</span> 条推荐</span>
+    </div>
+  </footer>
+
+  <!-- Detail dialog -->
+  <dialog id="detail" class="detail-dialog" aria-labelledby="detail-title">
+    <div class="detail-inner">
+      <button id="detail-close" class="icon-btn detail-close" type="button" aria-label="关闭详情">×</button>
+      <div id="detail-body"></div>
+    </div>
+  </dialog>
+
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

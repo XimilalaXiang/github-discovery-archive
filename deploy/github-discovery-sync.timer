@@ -1,0 +1,15 @@
+[Unit]
+Description=Run GitHub Discovery Archive sync shortly after the daily recommendation cron
+Documentation=file:///home/ubuntu/github-discovery-archive/README.md
+
+[Timer]
+# State file is written by the recommendation cron in the early morning; run the
+# sync a little later so the freshest day is always included. Adjust to taste.
+OnCalendar=*-*-* 01:20:00
+# Catch up on missed runs after downtime.
+Persistent=true
+RandomizedDelaySec=300
+Unit=github-discovery-sync.service
+
+[Install]
+WantedBy=timers.target

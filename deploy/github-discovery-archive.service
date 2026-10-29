@@ -1,0 +1,33 @@
+[Unit]
+Description=GitHub Discovery Archive — static web server
+Documentation=file:///home/ubuntu/github-discovery-archive/README.md
+After=network-online.target
+Wants=network-online.target
+# Uncomment if you deploy behind a local reverse proxy unit:
+# After=nginx.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/github-discovery-archive
+Environment=PYTHONUNBUFFERED=1
+# Bind to loopback; expose publicly via the reverse proxy / tunnel that
+# terminates TLS for projects.ximilala.com.
+ExecStart=/usr/bin/python3 /home/ubuntu/github-discovery-archive/serve.py --host 127.0.0.1 --port 8793
+Restart=on-failure
+RestartSec=3
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/github-discovery-archive/data
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryDenyWriteExecute=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=Watch the GitHub recommendation state for archive updates
+Documentation=file:///home/ubuntu/github-discovery-archive/README.md
+
+[Path]
+PathChanged=/home/ubuntu/.hermes/cron/state/github_daily_recs_state.json
+Unit=github-discovery-sync.service
+
+[Install]
+WantedBy=multi-user.target

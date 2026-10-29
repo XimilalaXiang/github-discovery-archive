@@ -1,0 +1,26 @@
+[Unit]
+Description=GitHub Discovery Archive — sync recommendation state to site data
+Documentation=file:///home/ubuntu/github-discovery-archive/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/github-discovery-archive
+Environment=PYTHONUNBUFFERED=1
+# Pull the latest state written by the daily recommendation cron, enrich via
+# the GitHub GraphQL API (uses the local `gh` auth), and write data/projects.json
+# atomically. Extra flags can go here, e.g. --refresh to bypass the cache.
+ExecStart=/usr/bin/python3 /home/ubuntu/github-discovery-archive/sync.py
+TimeoutStartSec=1800
+NoNewPrivileges=true
+PrivateTmp=true
+# Needs the gh config/cache under $HOME for authentication.
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/github-discovery-archive/data
+
+[Install]
+WantedBy=multi-user.target
